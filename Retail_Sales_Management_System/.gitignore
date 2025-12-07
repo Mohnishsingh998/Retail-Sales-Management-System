@@ -35,7 +35,6 @@ frontend/.env
 frontend/next-env.d.ts
 frontend/public/data/*.csv
 frontend/public/data/*.json
-frontend/postcss.config.mjs
 # Next.js build artifacts
 .next/
 out/
