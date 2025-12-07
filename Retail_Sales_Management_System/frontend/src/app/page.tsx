@@ -58,10 +58,17 @@ export default function SalesManagementPage() {
     setPage(1);
   };
 
-  const toggleDropdown = (name) => setOpenDropdown((prev) => (prev === name ? null : name));
+  const toggleDropdown = (name) =>
+    setOpenDropdown((prev) => (prev === name ? null : name));
 
-  const totalUnits = (data || []).reduce((s, it) => s + Number(it.Quantity || 0), 0);
-  const totalAmount = (data || []).reduce((s, it) => s + Number(it["Total Amount"] || 0), 0);
+  const totalUnits = (data || []).reduce(
+    (s, it) => s + Number(it.Quantity || 0),
+    0
+  );
+  const totalAmount = (data || []).reduce(
+    (s, it) => s + Number(it["Total Amount"] || 0),
+    0
+  );
 
   const totalDiscount = data.reduce(
     (sum, item) => sum + (item["Total Amount"] - item["Final Amount"]),
@@ -70,8 +77,11 @@ export default function SalesManagementPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      {/* HEADER */}
       <div className="bg-white border-b border-gray-200 px-8 py-2 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-gray-900">Sales Management System</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">
+          Sales Management System
+        </h1>
 
         <div className="w-110">
           <SearchBar
@@ -84,103 +94,112 @@ export default function SalesManagementPage() {
         </div>
       </div>
 
+      {/* FILTER BAR */}
       <div>
         <div className="bg-white rounded-lg p-5 pt-2 shadow-sm flex items-center gap-3 flex-wrap md:flex-nowrap w-full">
+
+          {/* RESET BUTTON */}
           <button
             onClick={handleReset}
-            className="p-2 bg-[#F2F4F7] border border-[#D0D5DD] rounded-lg hover:bg-[#EAECF0] transition-colors flex items-center justify-center"
+            className="h-[36px] w-[36px] flex items-center justify-center bg-[#F2F4F7] border border-[#D0D5DD] rounded-lg hover:bg-[#EAECF0] transition-colors"
           >
             <RotateCcw className="w-5 h-5 text-gray-700" />
           </button>
 
-          <div className="dropdown-wrapper">
-            <FilterDropdown
-              title="Customer Region"
-              options={FILTER_OPTIONS.customerRegion}
-              category="customerRegion"
-              selectedValues={filters.customerRegion}
-              onToggle={toggleFilter}
-              isOpen={openDropdown === "customerRegion"}
-              onToggleOpen={() => toggleDropdown("customerRegion")}
-            />
+          {/* ALL FILTERS (LEFT) */}
+          <div className="flex items-center gap-3 flex-wrap">
+
+            <div className="dropdown-wrapper relative">
+              <FilterDropdown
+                title="Customer Region"
+                options={FILTER_OPTIONS.customerRegion}
+                category="customerRegion"
+                selectedValues={filters.customerRegion}
+                onToggle={toggleFilter}
+                isOpen={openDropdown === "customerRegion"}
+                onToggleOpen={() => toggleDropdown("customerRegion")}
+              />
+            </div>
+
+            <div className="dropdown-wrapper relative">
+              <FilterDropdown
+                title="Gender"
+                options={FILTER_OPTIONS.gender}
+                category="gender"
+                selectedValues={filters.gender}
+                onToggle={toggleFilter}
+                isOpen={openDropdown === "gender"}
+                onToggleOpen={() => toggleDropdown("gender")}
+              />
+            </div>
+
+            <div className="dropdown-wrapper relative">
+              <RangeFilter
+                title="Age Range"
+                minValue={filters.ageRange.min}
+                maxValue={filters.ageRange.max}
+                onMinChange={(v) => updateRangeFilter("ageRange", "min", v)}
+                onMaxChange={(v) => updateRangeFilter("ageRange", "max", v)}
+                isOpen={openDropdown === "age"}
+                onToggleOpen={() => toggleDropdown("age")}
+              />
+            </div>
+
+            <div className="dropdown-wrapper relative">
+              <FilterDropdown
+                title="Product Category"
+                options={FILTER_OPTIONS.productCategory}
+                category="productCategory"
+                selectedValues={filters.productCategory}
+                onToggle={toggleFilter}
+                isOpen={openDropdown === "productCategory"}
+                onToggleOpen={() => toggleDropdown("productCategory")}
+              />
+            </div>
+
+            <div className="dropdown-wrapper relative">
+              <FilterDropdown
+                title="Tags"
+                options={FILTER_OPTIONS.tags}
+                category="tags"
+                selectedValues={filters.tags}
+                onToggle={toggleFilter}
+                isOpen={openDropdown === "tags"}
+                onToggleOpen={() => toggleDropdown("tags")}
+              />
+            </div>
+
+            <div className="dropdown-wrapper relative">
+              <FilterDropdown
+                title="Payment Method"
+                options={FILTER_OPTIONS.paymentMethod}
+                category="paymentMethod"
+                selectedValues={filters.paymentMethod}
+                onToggle={toggleFilter}
+                isOpen={openDropdown === "paymentMethod"}
+                onToggleOpen={() => toggleDropdown("paymentMethod")}
+              />
+            </div>
+
+            <div className="dropdown-wrapper relative">
+              <DateRangeFilter
+                startDate={filters.dateRange.start}
+                endDate={filters.dateRange.end}
+                onStartChange={(v) => updateRangeFilter("dateRange", "start", v)}
+                onEndChange={(v) => updateRangeFilter("dateRange", "end", v)}
+                isOpen={openDropdown === "date"}
+                onToggleOpen={() => toggleDropdown("date")}
+              />
+            </div>
+
           </div>
 
-          <div className="dropdown-wrapper">
-            <FilterDropdown
-              title="Gender"
-              options={FILTER_OPTIONS.gender}
-              category="gender"
-              selectedValues={filters.gender}
-              onToggle={toggleFilter}
-              isOpen={openDropdown === "gender"}
-              onToggleOpen={() => toggleDropdown("gender")}
-            />
-          </div>
-
-          <div className="dropdown-wrapper">
-            <RangeFilter
-              title="Age Range"
-              minValue={filters.ageRange.min}
-              maxValue={filters.ageRange.max}
-              onMinChange={(v) => updateRangeFilter("ageRange", "min", v)}
-              onMaxChange={(v) => updateRangeFilter("ageRange", "max", v)}
-              isOpen={openDropdown === "age"}
-              onToggleOpen={() => toggleDropdown("age")}
-            />
-          </div>
-
-          <div className="dropdown-wrapper">
-            <FilterDropdown
-              title="Product Category"
-              options={FILTER_OPTIONS.productCategory}
-              category="productCategory"
-              selectedValues={filters.productCategory}
-              onToggle={toggleFilter}
-              isOpen={openDropdown === "productCategory"}
-              onToggleOpen={() => toggleDropdown("productCategory")}
-            />
-          </div>
-
-          <div className="dropdown-wrapper">
-            <FilterDropdown
-              title="Tags"
-              options={FILTER_OPTIONS.tags}
-              category="tags"
-              selectedValues={filters.tags}
-              onToggle={toggleFilter}
-              isOpen={openDropdown === "tags"}
-              onToggleOpen={() => toggleDropdown("tags")}
-            />
-          </div>
-
-          <div className="dropdown-wrapper">
-            <FilterDropdown
-              title="Payment Method"
-              options={FILTER_OPTIONS.paymentMethod}
-              category="paymentMethod"
-              selectedValues={filters.paymentMethod}
-              onToggle={toggleFilter}
-              isOpen={openDropdown === "paymentMethod"}
-              onToggleOpen={() => toggleDropdown("paymentMethod")}
-            />
-          </div>
-
-          <div className="dropdown-wrapper">
-            <DateRangeFilter
-              startDate={filters.dateRange.start}
-              endDate={filters.dateRange.end}
-              onStartChange={(v) => updateRangeFilter("dateRange", "start", v)}
-              onEndChange={(v) => updateRangeFilter("dateRange", "end", v)}
-              isOpen={openDropdown === "date"}
-              onToggleOpen={() => toggleDropdown("date")}
-            />
-          </div>
-
+          {/* SORT (RIGHT SIDE) */}
           <div className="ml-auto flex items-center gap-3 pr-3">
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="px-4 py-2 bg-[#F2F4F7] border border-[#D0D5DD] rounded-lg text-sm text-gray-700 font-medium hover:bg-[#EAECF0] transition-colors cursor-pointer h-[38px]"
+              className="px-4 h-[36px] bg-[#F2F4F7] border border-[#D0D5DD] rounded-lg text-sm text-gray-700 font-medium hover:bg-[#EAECF0] transition-colors cursor-pointer"
             >
               {SORT_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -191,6 +210,7 @@ export default function SalesManagementPage() {
           </div>
         </div>
 
+        {/* STATS CARDS */}
         <div className="flex items-start gap-4 pl-6 pb-4 flex-wrap bg-white">
           <StatsCard title="Total units sold" value={totalUnits} />
           <StatsCard
@@ -205,8 +225,10 @@ export default function SalesManagementPage() {
           />
         </div>
 
+        {/* TABLE */}
         <TransactionTable data={data} loading={loading} />
 
+        {/* PAGINATION */}
         {!loading && data.length > 0 && (
           <div className="bg-white rounded-lg shadow-sm">
             <Pagination
