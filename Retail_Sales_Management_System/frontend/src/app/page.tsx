@@ -13,6 +13,7 @@ import { RotateCcw } from "lucide-react";
 import { useFilters } from "../hooks/useFilters";
 import useSales from "../hooks/useSales.js";
 import { formatCurrency } from "../utils/helpers";
+import Sidebar from "../components/Sidebar";
 import { SORT_OPTIONS, FILTER_OPTIONS } from "../utils/constants";
 
 /** Type for each sale row */
@@ -173,137 +174,144 @@ export default function SalesManagementPage() {
   // ------------------------------
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* HEADER */}
-      <div className="bg-white border-b border-gray-200 px-8 py-2 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-gray-900">
-          Sales Management System
-        </h1>
+    <div className="flex h-screen bg-gray-50">
+      {/* SIDEBAR */}
+      <Sidebar />
 
-        <div className="w-110">
-          <SearchBar
-            value={search}
-            onChange={(v: string) => {
-              setSearch(v);
-              setPage(1);
-            }}
-          />
-        </div>
-      </div>
+      {/* MAIN CONTENT */}
+      <main className="flex-1 flex flex-col overflow-hidden">
+        {/* HEADER */}
+        <div className="bg-white border-b border-gray-100 px-8 py-2">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-regular text-gray-900">
+              Sales Management System
+            </h1>
 
-      {/* FILTER BAR */}
-      <div>
-        <div className="bg-white rounded-lg p-5 pt-2 shadow-sm flex items-center gap-3 flex-wrap md:flex-nowrap w-full">
-          {/* RESET BUTTON */}
-          <button
-            onClick={handleReset}
-            className="h-[36px] w-[36px] flex items-center justify-center bg-[#F2F4F7] border border-[#D0D5DD] rounded-lg hover:bg-[#EAECF0] transition-colors"
-            aria-label="Reset filters"
-          >
-            <RotateCcw className="w-5 h-5 text-gray-700" />
-          </button>
-
-          {/* FILTERS LEFT SIDE */}
-          <div className="flex items-center gap-3 flex-wrap">
-            <div className="dropdown-wrapper relative">
-              <FilterDropdown
-                title="Customer Region"
-                options={customerRegionOptions as never[]}
-                category="customerRegion"
-                selectedValues={selectedCustomerRegion as never[]}
-                onToggle={toggleFilter}
-                isOpen={openDropdown === "customerRegion"}
-                onToggleOpen={() => toggleDropdown("customerRegion")}
-              />
-            </div>
-
-            <div className="dropdown-wrapper relative">
-              <FilterDropdown
-                title="Gender"
-                options={genderOptions as never[]}
-                category="gender"
-                selectedValues={selectedGender as never[]}
-                onToggle={toggleFilter}
-                isOpen={openDropdown === "gender"}
-                onToggleOpen={() => toggleDropdown("gender")}
-              />
-            </div>
-
-            <div className="dropdown-wrapper relative">
-              <RangeFilter
-                title="Age Range"
-                minValue={filters?.ageRange?.min ?? ""}
-                maxValue={filters?.ageRange?.max ?? ""}
-                onMinChange={(v: number) =>
-                  updateRangeFilter && updateRangeFilter("ageRange", "min", v)
-                }
-                onMaxChange={(v: number) =>
-                  updateRangeFilter && updateRangeFilter("ageRange", "max", v)
-                }
-                isOpen={openDropdown === "age"}
-                onToggleOpen={() => toggleDropdown("age")}
-              />
-            </div>
-
-            <div className="dropdown-wrapper relative">
-              <FilterDropdown
-                title="Product Category"
-                options={productCategoryOptions as never[]}
-                category="productCategory"
-                selectedValues={selectedProductCategory as never[]}
-                onToggle={toggleFilter}
-                isOpen={openDropdown === "productCategory"}
-                onToggleOpen={() => toggleDropdown("productCategory")}
-              />
-            </div>
-
-            <div className="dropdown-wrapper relative">
-              <FilterDropdown
-                title="Tags"
-                options={tagsOptions as never[]}
-                category="tags"
-                selectedValues={selectedTags as never[]}
-                onToggle={toggleFilter}
-                isOpen={openDropdown === "tags"}
-                onToggleOpen={() => toggleDropdown("tags")}
-              />
-            </div>
-
-            <div className="dropdown-wrapper relative">
-              <FilterDropdown
-                title="Payment Method"
-                options={paymentMethodOptions as never[]}
-                category="paymentMethod"
-                selectedValues={selectedPaymentMethod as never[]}
-                onToggle={toggleFilter}
-                isOpen={openDropdown === "paymentMethod"}
-                onToggleOpen={() => toggleDropdown("paymentMethod")}
-              />
-            </div>
-
-            <div className="dropdown-wrapper relative">
-              <DateRangeFilter
-                startDate={filters?.dateRange?.start || ""}
-                endDate={filters?.dateRange?.end || ""}
-                onStartChange={(v: string) =>
-                  updateRangeFilter &&
-                  updateRangeFilter("dateRange", "start", v)
-                }
-                onEndChange={(v: string) =>
-                  updateRangeFilter && updateRangeFilter("dateRange", "end", v)
-                }
-                isOpen={openDropdown === "date"}
-                onToggleOpen={() => toggleDropdown("date")}
+            <div className="w-90">
+              <SearchBar
+                value={search}
+                onChange={(v: string) => {
+                  setSearch(v);
+                  setPage(1);
+                }}
               />
             </div>
           </div>
+        </div>
 
-          {/* SORT DROPDOWN */}
-          <div className="ml-auto flex items-center gap-3 pr-3">
+        {/* FILTER BAR */}
+        <div className="bg-white px-8 py-4 border-b border-gray-100">
+          <div className="flex items-center gap-2">
+            {/* RESET BUTTON - Fixed width */}
+            <button
+              onClick={handleReset}
+              className="h-[25px] w-[25px] shrink-0 flex items-center justify-center bg-[#F2F4F7] border border-[#D0D5DD] rounded-sm hover:bg-[#EAECF0] transition-colors"
+              aria-label="Reset filters"
+            >
+              <RotateCcw className="w-2.5 h-2.5 text-gray-700" />
+            </button>
+
+            {/* FILTERS CONTAINER - Equal width for all filters */}
+            <div className="flex items-center gap-1 flex-1">
+              <div className="dropdown-wrapper relative ">
+                <FilterDropdown
+                  title="Customer Region"
+                  options={customerRegionOptions as never[]}
+                  category="customerRegion"
+                  selectedValues={selectedCustomerRegion as never[]}
+                  onToggle={toggleFilter}
+                  isOpen={openDropdown === "customerRegion"}
+                  onToggleOpen={() => toggleDropdown("customerRegion")}
+                />
+              </div>
+
+              <div className="dropdown-wrapper relative ">
+                <FilterDropdown
+                  title="Gender"
+                  options={genderOptions as never[]}
+                  category="gender"
+                  selectedValues={selectedGender as never[]}
+                  onToggle={toggleFilter}
+                  isOpen={openDropdown === "gender"}
+                  onToggleOpen={() => toggleDropdown("gender")}
+                />
+              </div>
+
+              <div className="dropdown-wrapper relative ">
+                <RangeFilter
+                  title="Age Range"
+                  minValue={filters?.ageRange?.min ?? ""}
+                  maxValue={filters?.ageRange?.max ?? ""}
+                  onMinChange={(v: number) =>
+                    updateRangeFilter && updateRangeFilter("ageRange", "min", v)
+                  }
+                  onMaxChange={(v: number) =>
+                    updateRangeFilter && updateRangeFilter("ageRange", "max", v)
+                  }
+                  isOpen={openDropdown === "age"}
+                  onToggleOpen={() => toggleDropdown("age")}
+                />
+              </div>
+
+              <div className="dropdown-wrapper relative ">
+                <FilterDropdown
+                  title="Product Category"
+                  options={productCategoryOptions as never[]}
+                  category="productCategory"
+                  selectedValues={selectedProductCategory as never[]}
+                  onToggle={toggleFilter}
+                  isOpen={openDropdown === "productCategory"}
+                  onToggleOpen={() => toggleDropdown("productCategory")}
+                />
+              </div>
+
+              <div className="dropdown-wrapper relative ">
+                <FilterDropdown
+                  title="Tags"
+                  options={tagsOptions as never[]}
+                  category="tags"
+                  selectedValues={selectedTags as never[]}
+                  onToggle={toggleFilter}
+                  isOpen={openDropdown === "tags"}
+                  onToggleOpen={() => toggleDropdown("tags")}
+                />
+              </div>
+
+              <div className="dropdown-wrapper relative">
+                <FilterDropdown
+                  title="Payment Method"
+                  options={paymentMethodOptions as never[]}
+                  category="paymentMethod"
+                  selectedValues={selectedPaymentMethod as never[]}
+                  onToggle={toggleFilter}
+                  isOpen={openDropdown === "paymentMethod"}
+                  onToggleOpen={() => toggleDropdown("paymentMethod")}
+                />
+              </div>
+
+              <div className="dropdown-wrapper relative shrink-0">
+                <DateRangeFilter
+                  startDate={filters?.dateRange?.start || ""}
+                  endDate={filters?.dateRange?.end || ""}
+                  onStartChange={(v: string) =>
+                    updateRangeFilter &&
+                    updateRangeFilter("dateRange", "start", v)
+                  }
+                  onEndChange={(v: string) =>
+                    updateRangeFilter &&
+                    updateRangeFilter("dateRange", "end", v)
+                  }
+                  isOpen={openDropdown === "date"}
+                  onToggleOpen={() => toggleDropdown("date")}
+                />
+              </div>
+            </div>
+
+            {/* SORT DROPDOWN - Fixed on right */}
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="px-4 h-[36px] bg-[#F2F4F7] border border-[#D0D5DD] rounded-lg text-sm text-gray-700 font-medium hover:bg-[#EAECF0] transition-colors cursor-pointer"
+              className="shrink-0 px-3 h-[26px] bg-[#F2F4F7] border border-[#D0D5DD] rounded-sm text-xs text-gray-700 font-medium hover:bg-[#EAECF0] transition-colors cursor-pointer min-w-[180px]"
             >
               {Array.isArray(SORT_OPTIONS) &&
                 (SORT_OPTIONS as SortOption[]).map((option: SortOption) => (
@@ -316,33 +324,33 @@ export default function SalesManagementPage() {
         </div>
 
         {/* STATS */}
-        <div className="flex items-start gap-4 pl-6 pb-4 flex-wrap bg-white">
-          <StatsCard
-            title="Total units sold"
-            value={totalUnits}
-            subtitle={`(${safeData.length} SRs)`}
-          />
-          <StatsCard
-            title="Total Amount"
-            value={formatCurrency(totalAmount)}
-            subtitle={`(${safeData.length} SRs)`}
-          />
-          <StatsCard
-            title="Total Discount"
-            value={formatCurrency(totalDiscount)}
-            subtitle={`(${safeData.length} SRs)`}
-          />
+        <div className="bg-white px-8 py-4 border-gray-200">
+          <div className="flex items-center gap-6">
+            <StatsCard title="Total units sold" value={totalUnits} subtitle="" />
+            <StatsCard
+              title="Total Amount"
+              value={formatCurrency(totalAmount)}
+              subtitle={`(${safeData.length} SRs)`}
+            />
+            <StatsCard
+              title="Total Discount"
+              value={formatCurrency(totalDiscount)}
+              subtitle={`(${safeData.length} SRs)`}
+            />
+          </div>
         </div>
 
         {/* TABLE */}
-        <TransactionTable
-          data={safeData as never[]}
-          loading={loading || false}
-        />
+        <div className="flex-1 overflow-auto bg-white">
+          <TransactionTable
+            data={safeData as never[]}
+            loading={loading || false}
+          />
+        </div>
 
         {/* PAGINATION */}
         {!loading && safeData.length > 0 && (
-          <div className="bg-white rounded-lg shadow-sm">
+          <div className="bg-white border-t border-gray-200 px-8 py-2">
             <Pagination
               currentPage={safePagination.currentPage || page}
               totalPages={safePagination.totalPages || 1}
@@ -355,7 +363,7 @@ export default function SalesManagementPage() {
             />
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }

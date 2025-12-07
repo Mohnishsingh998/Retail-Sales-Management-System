@@ -23,15 +23,9 @@ const RangeFilter = ({
       {/* BUTTON */}
       <button
         onClick={onToggleOpen}
-        className="px-3 py-1.5 h-[36px] bg-[#F2F4F7] border border-[#D0D5DD] rounded-lg inline-flex items-center justify-between gap-2 text-sm text-gray-700 font-medium hover:bg-[#EAECF0] transition-colors whitespace-nowrap shrink-0"
+        className="px-1  h-[26px] bg-[#F2F4F7] border border-[#D0D5DD] rounded-sm inline-flex items-center justify-between gap-2 text-xs text-gray-700 hover:bg-[#EAECF0] transition-colors whitespace-nowrap shrink-0 font-normal"
       >
         <span>{title}</span>
-
-        {hasValue && (
-          <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded-full font-semibold shrink-0">
-            1
-          </span>
-        )}
 
         <ChevronDown className="w-4 h-4 text-gray-700 shrink-0" />
       </button>

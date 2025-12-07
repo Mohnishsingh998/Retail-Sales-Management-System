@@ -26,7 +26,7 @@ const TransactionTable = ({ data = [], loading = false }) => {
             {TABLE_COLUMNS.map((col) => (
               <th
                 key={col.key}
-                className="px-4 py-3 text-left text-xs font-normal tracking-wide"
+                className="px-4 py-3 text-left text-xs font-normal whitespace-nowrap tracking-wide"
               >
                 {col.label}
               </th>
@@ -53,7 +53,7 @@ const TransactionTable = ({ data = [], loading = false }) => {
                   {removeHyphens(row["Customer ID"])}
                 </td>
 
-                <td className={`px-4 py-3 text-xs text-black font-lightbold ${borderClass}`}>
+                <td className={`px-4 py-3 text-xs text-black whitespace-nowrap font-lightbold ${borderClass}`}>
                   {row["Customer Name"]}
                 </td>
 

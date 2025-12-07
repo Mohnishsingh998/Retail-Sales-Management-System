@@ -20,7 +20,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange, hasNextPage, hasPre
   };
 
   return (
-    <div className="border-t border-gray-200 px-6 py-5 flex items-center justify-center gap-2">
+    <div className=" border-gray-200 px-6 flex items-center justify-center gap-2">
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={!hasPreviousPage}
