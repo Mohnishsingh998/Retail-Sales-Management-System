@@ -23,13 +23,8 @@ build/
 # -------------------------------
 # Backend Ignored Files
 # -------------------------------
-./backend/node_modules/
+backend/node_modules
 backend/.env
-backend/src/data/*.csv 
-backend/src/data/*.json
-# Mongoose temp files
-backend/*.pid
-./backend/.env
 # -------------------------------
 # Frontend (Next.js) Ignored Files
 # -------------------------------
