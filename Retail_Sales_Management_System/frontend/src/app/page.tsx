@@ -15,15 +15,27 @@ import useSales from "../hooks/useSales.js";
 import { formatCurrency } from "../utils/helpers";
 import { SORT_OPTIONS, FILTER_OPTIONS } from "../utils/constants";
 
+/**
+ * Minimal local type so TS doesn't treat data items as `never`.
+ * Keep it permissive — add more precise fields if you want.
+ */
+type SaleItem = {
+  Quantity?: number;
+  "Total Amount"?: number;
+  "Final Amount"?: number;
+  [key: string]: any;
+};
+
 export default function SalesManagementPage() {
   const { filters, toggleFilter, updateRangeFilter, resetFilters } = useFilters();
-  const { data, loading, pagination, loadData } = useSales();
+  // cast useSales to any and declare data as SaleItem[] to avoid touching the hook file
+  const { data = [] as SaleItem[], loading, pagination, loadData } = (useSales() as any);
 
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("date-desc");
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
-  const [openDropdown, setOpenDropdown] = useState(null);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   const fetch = useCallback(() => {
     loadData({
@@ -40,8 +52,10 @@ export default function SalesManagementPage() {
   }, [fetch]);
 
   useEffect(() => {
-    const handleOutsideClick = (e) => {
-      if (!e.target.closest(".dropdown-wrapper")) {
+    const handleOutsideClick = (e: MouseEvent) => {
+      // e.target can be null in some environments; guard and cast
+      const target = e.target as HTMLElement | null;
+      if (!target || !target.closest(".dropdown-wrapper")) {
         setOpenDropdown(null);
       }
     };
@@ -49,7 +63,7 @@ export default function SalesManagementPage() {
     return () => document.removeEventListener("click", handleOutsideClick);
   }, []);
 
-  const handlePageChange = (newPage) => setPage(newPage);
+  const handlePageChange = (newPage: number) => setPage(newPage);
 
   const handleReset = () => {
     setSearch("");
@@ -58,20 +72,21 @@ export default function SalesManagementPage() {
     setPage(1);
   };
 
-  const toggleDropdown = (name) =>
+  const toggleDropdown = (name: string) =>
     setOpenDropdown((prev) => (prev === name ? null : name));
 
-  const totalUnits = (data || []).reduce(
+  const totalUnits = data.reduce(
     (s, it) => s + Number(it.Quantity || 0),
     0
   );
-  const totalAmount = (data || []).reduce(
+
+  const totalAmount = data.reduce(
     (s, it) => s + Number(it["Total Amount"] || 0),
     0
   );
 
   const totalDiscount = data.reduce(
-    (sum, item) => sum + (item["Total Amount"] - item["Final Amount"]),
+    (sum , item) => sum + ((item["Total Amount"] || 0) - (item["Final Amount"] || 0)),
     0
   );
 
@@ -86,7 +101,7 @@ export default function SalesManagementPage() {
         <div className="w-110">
           <SearchBar
             value={search}
-            onChange={(v) => {
+            onChange={(v: string) => {
               setSearch(v);
               setPage(1);
             }}
@@ -106,7 +121,7 @@ export default function SalesManagementPage() {
             <RotateCcw className="w-5 h-5 text-gray-700" />
           </button>
 
-          {/* ALL FILTERS (LEFT) */}
+          {/* ALL FILTERS */}
           <div className="flex items-center gap-3 flex-wrap">
 
             <div className="dropdown-wrapper relative">
@@ -138,8 +153,8 @@ export default function SalesManagementPage() {
                 title="Age Range"
                 minValue={filters.ageRange.min}
                 maxValue={filters.ageRange.max}
-                onMinChange={(v) => updateRangeFilter("ageRange", "min", v)}
-                onMaxChange={(v) => updateRangeFilter("ageRange", "max", v)}
+                onMinChange={(v: number) => updateRangeFilter("ageRange", "min", v)}
+                onMaxChange={(v: number) => updateRangeFilter("ageRange", "max", v)}
                 isOpen={openDropdown === "age"}
                 onToggleOpen={() => toggleDropdown("age")}
               />
@@ -185,8 +200,8 @@ export default function SalesManagementPage() {
               <DateRangeFilter
                 startDate={filters.dateRange.start}
                 endDate={filters.dateRange.end}
-                onStartChange={(v) => updateRangeFilter("dateRange", "start", v)}
-                onEndChange={(v) => updateRangeFilter("dateRange", "end", v)}
+                onStartChange={(v: string) => updateRangeFilter("dateRange", "start", v)}
+                onEndChange={(v: string) => updateRangeFilter("dateRange", "end", v)}
                 isOpen={openDropdown === "date"}
                 onToggleOpen={() => toggleDropdown("date")}
               />
@@ -236,7 +251,7 @@ export default function SalesManagementPage() {
               totalPages={pagination.totalPages || 1}
               hasNextPage={pagination.hasNextPage}
               hasPreviousPage={pagination.hasPreviousPage}
-              onPageChange={(p) => {
+              onPageChange={(p: number) => {
                 handlePageChange(p);
                 setPage(p);
               }}
