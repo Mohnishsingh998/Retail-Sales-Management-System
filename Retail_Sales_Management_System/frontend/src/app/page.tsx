@@ -56,7 +56,11 @@ type SalesHookReturn = {
 type FilterHookReturn = {
   filters: FilterState;
   toggleFilter: (category: string, value: string) => void;
-  updateRangeFilter: (category: string, key: string, value: number | string) => void;
+  updateRangeFilter: (
+    category: string,
+    key: string,
+    value: number | string
+  ) => void;
   resetFilters: () => void;
 };
 
@@ -66,7 +70,8 @@ type SortOption = {
 };
 
 export default function SalesManagementPage() {
-  const { filters, toggleFilter, updateRangeFilter, resetFilters } = useFilters() as unknown as FilterHookReturn;
+  const { filters, toggleFilter, updateRangeFilter, resetFilters } =
+    useFilters() as unknown as FilterHookReturn;
 
   const {
     data = [] as SaleItem[],
@@ -120,32 +125,43 @@ export default function SalesManagementPage() {
   const toggleDropdown = (name: string) =>
     setOpenDropdown((prev) => (prev === name ? null : name));
 
-  const totalUnits = Array.isArray(data) ? data.reduce(
-    (s: number, it: SaleItem) => s + Number(it.Quantity || 0),
-    0
-  ) : 0;
+  const totalUnits = Array.isArray(data)
+    ? data.reduce((s: number, it: SaleItem) => s + Number(it.Quantity || 0), 0)
+    : 0;
 
-  const totalAmount = Array.isArray(data) ? data.reduce(
-    (s: number, it: SaleItem) => s + Number(it["Total Amount"] || 0),
-    0
-  ) : 0;
+  const totalAmount = Array.isArray(data)
+    ? data.reduce(
+        (s: number, it: SaleItem) => s + Number(it["Total Amount"] || 0),
+        0
+      )
+    : 0;
 
-  const totalDiscount = Array.isArray(data) ? data.reduce(
-    (sum: number, item: SaleItem) =>
-      sum + ((item["Total Amount"] || 0) - (item["Final Amount"] || 0)),
-    0
-  ) : 0;
+  const totalDiscount = Array.isArray(data)
+    ? data.reduce(
+        (sum: number, item: SaleItem) =>
+          sum + ((item["Total Amount"] || 0) - (item["Final Amount"] || 0)),
+        0
+      )
+    : 0;
 
   // Safe array for rendering
   const safeData = Array.isArray(data) ? data : [];
-  const safePagination = pagination || { currentPage: 1, totalPages: 1, hasNextPage: false, hasPreviousPage: false };
+  const safePagination = pagination || {
+    currentPage: 1,
+    totalPages: 1,
+    hasNextPage: false,
+    hasPreviousPage: false,
+  };
 
   // Type-safe filter options
-  const customerRegionOptions = (FILTER_OPTIONS?.customerRegion || []) as string[];
+  const customerRegionOptions = (FILTER_OPTIONS?.customerRegion ||
+    []) as string[];
   const genderOptions = (FILTER_OPTIONS?.gender || []) as string[];
-  const productCategoryOptions = (FILTER_OPTIONS?.productCategory || []) as string[];
+  const productCategoryOptions = (FILTER_OPTIONS?.productCategory ||
+    []) as string[];
   const tagsOptions = (FILTER_OPTIONS?.tags || []) as string[];
-  const paymentMethodOptions = (FILTER_OPTIONS?.paymentMethod || []) as string[];
+  const paymentMethodOptions = (FILTER_OPTIONS?.paymentMethod ||
+    []) as string[];
 
   // Type-safe filter values
   const selectedCustomerRegion = (filters?.customerRegion || []) as string[];
@@ -178,7 +194,6 @@ export default function SalesManagementPage() {
       {/* FILTER BAR */}
       <div>
         <div className="bg-white rounded-lg p-5 pt-2 shadow-sm flex items-center gap-3 flex-wrap md:flex-nowrap w-full">
-
           {/* RESET BUTTON */}
           <button
             onClick={handleReset}
@@ -190,7 +205,6 @@ export default function SalesManagementPage() {
 
           {/* FILTERS LEFT SIDE */}
           <div className="flex items-center gap-3 flex-wrap">
-
             <div className="dropdown-wrapper relative">
               <FilterDropdown
                 title="Customer Region"
@@ -218,8 +232,8 @@ export default function SalesManagementPage() {
             <div className="dropdown-wrapper relative">
               <RangeFilter
                 title="Age Range"
-                minValue={Number(filters?.ageRange?.min)}
-                maxValue={Number(filters?.ageRange?.max)}
+                minValue={filters?.ageRange?.min ?? ""}
+                maxValue={filters?.ageRange?.max ?? ""}
                 onMinChange={(v: number) =>
                   updateRangeFilter && updateRangeFilter("ageRange", "min", v)
                 }
@@ -272,7 +286,8 @@ export default function SalesManagementPage() {
                 startDate={filters?.dateRange?.start || ""}
                 endDate={filters?.dateRange?.end || ""}
                 onStartChange={(v: string) =>
-                  updateRangeFilter && updateRangeFilter("dateRange", "start", v)
+                  updateRangeFilter &&
+                  updateRangeFilter("dateRange", "start", v)
                 }
                 onEndChange={(v: string) =>
                   updateRangeFilter && updateRangeFilter("dateRange", "end", v)
@@ -290,21 +305,22 @@ export default function SalesManagementPage() {
               onChange={(e) => setSortBy(e.target.value)}
               className="px-4 h-[36px] bg-[#F2F4F7] border border-[#D0D5DD] rounded-lg text-sm text-gray-700 font-medium hover:bg-[#EAECF0] transition-colors cursor-pointer"
             >
-              {Array.isArray(SORT_OPTIONS) && (SORT_OPTIONS as SortOption[]).map((option: SortOption) => (
-                <option key={option.value} value={option.value}>
-                  Sort by: {option.label}
-                </option>
-              ))}
+              {Array.isArray(SORT_OPTIONS) &&
+                (SORT_OPTIONS as SortOption[]).map((option: SortOption) => (
+                  <option key={option.value} value={option.value}>
+                    Sort by: {option.label}
+                  </option>
+                ))}
             </select>
           </div>
         </div>
 
         {/* STATS */}
         <div className="flex items-start gap-4 pl-6 pb-4 flex-wrap bg-white">
-          <StatsCard 
-            title="Total units sold" 
-            value={totalUnits} 
-            subtitle={`(${safeData.length} SRs)`} 
+          <StatsCard
+            title="Total units sold"
+            value={totalUnits}
+            subtitle={`(${safeData.length} SRs)`}
           />
           <StatsCard
             title="Total Amount"
@@ -319,7 +335,10 @@ export default function SalesManagementPage() {
         </div>
 
         {/* TABLE */}
-        <TransactionTable data={safeData as never[]} loading={loading || false} />
+        <TransactionTable
+          data={safeData as never[]}
+          loading={loading || false}
+        />
 
         {/* PAGINATION */}
         {!loading && safeData.length > 0 && (

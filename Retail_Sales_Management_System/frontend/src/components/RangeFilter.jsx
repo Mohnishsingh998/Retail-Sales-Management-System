@@ -13,7 +13,10 @@ const RangeFilter = ({
   minPlaceholder = "Min",
   maxPlaceholder = "Max",
 }) => {
-  const hasValue = minValue || maxValue;
+  const hasValue =
+  (minValue !== "" && !isNaN(Number(minValue))) ||
+  (maxValue !== "" && !isNaN(Number(maxValue)));
+
 
   return (
     <div className="relative dropdown-wrapper whitespace-nowrap">
@@ -38,7 +41,9 @@ const RangeFilter = ({
         <div className="absolute top-full mt-2 bg-white border border-[#D0D5DD] rounded-lg shadow-lg z-20 p-4 min-w-[230px]">
           <div className="flex gap-3">
             <input
-              type="number"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
               placeholder={minPlaceholder}
               value={minValue}
               onChange={(e) => onMinChange(e.target.value)}
@@ -46,7 +51,9 @@ const RangeFilter = ({
             />
 
             <input
-              type="number"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
               placeholder={maxPlaceholder}
               value={maxValue}
               onChange={(e) => onMaxChange(e.target.value)}

@@ -4,7 +4,7 @@
 export const FILTER_OPTIONS = {
   customerRegion: ['North', 'South', 'East', 'West', 'Central'],
   gender: ['Male', 'Female'],
-  productCategory: ['Electronics', 'Clothing', 'Beauty', 'Home & Kitchen'],
+  productCategory: ['Electronics', 'Clothing', 'Beauty'],
   tags: ['smart', 'portable', 'wireless', 'gadgets', 'fashion', 'casual', 'organic', 'skincare'],
   paymentMethod: ['Cash', 'Credit Card', 'Debit Card', 'UPI']
 };
