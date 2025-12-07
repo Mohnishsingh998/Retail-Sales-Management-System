@@ -15,10 +15,7 @@ import useSales from "../hooks/useSales.js";
 import { formatCurrency } from "../utils/helpers";
 import { SORT_OPTIONS, FILTER_OPTIONS } from "../utils/constants";
 
-/**
- * Minimal local type so TS doesn't treat data items as `never`.
- * Keep it permissive — add more precise fields if you want.
- */
+/** Type for each sale row */
 type SaleItem = {
   Quantity?: number;
   "Total Amount"?: number;
@@ -28,8 +25,14 @@ type SaleItem = {
 
 export default function SalesManagementPage() {
   const { filters, toggleFilter, updateRangeFilter, resetFilters } = useFilters();
-  // cast useSales to any and declare data as SaleItem[] to avoid touching the hook file
-  const { data = [] as SaleItem[], loading, pagination, loadData } = (useSales() as any);
+
+  /** Cast useSales() to any and force data to be SaleItem[] */
+  const {
+    data = [] as SaleItem[],
+    loading,
+    pagination,
+    loadData,
+  } = useSales() as any;
 
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("date-desc");
@@ -53,9 +56,8 @@ export default function SalesManagementPage() {
 
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
-      // e.target can be null in some environments; guard and cast
       const target = e.target as HTMLElement | null;
-      if (!target || !target.closest(".dropdown-wrapper")) {
+      if (!target?.closest(".dropdown-wrapper")) {
         setOpenDropdown(null);
       }
     };
@@ -76,19 +78,22 @@ export default function SalesManagementPage() {
     setOpenDropdown((prev) => (prev === name ? null : name));
 
   const totalUnits = data.reduce(
-    (s, it) => s + Number(it.Quantity || 0),
+    (s: number, it: SaleItem) => s + Number(it.Quantity || 0),
     0
   );
 
   const totalAmount = data.reduce(
-    (s, it) => s + Number(it["Total Amount"] || 0),
+    (s: number, it: SaleItem) => s + Number(it["Total Amount"] || 0),
     0
   );
 
   const totalDiscount = data.reduce(
-    (sum , item) => sum + ((item["Total Amount"] || 0) - (item["Final Amount"] || 0)),
+    (sum: number, item: SaleItem) =>
+      sum + ((item["Total Amount"] || 0) - (item["Final Amount"] || 0)),
     0
   );
+
+  // ------------------------------
 
   return (
     <div className="min-h-screen bg-white">
@@ -121,7 +126,7 @@ export default function SalesManagementPage() {
             <RotateCcw className="w-5 h-5 text-gray-700" />
           </button>
 
-          {/* ALL FILTERS */}
+          {/* FILTERS LEFT SIDE */}
           <div className="flex items-center gap-3 flex-wrap">
 
             <div className="dropdown-wrapper relative">
@@ -153,8 +158,12 @@ export default function SalesManagementPage() {
                 title="Age Range"
                 minValue={filters.ageRange.min}
                 maxValue={filters.ageRange.max}
-                onMinChange={(v: number) => updateRangeFilter("ageRange", "min", v)}
-                onMaxChange={(v: number) => updateRangeFilter("ageRange", "max", v)}
+                onMinChange={(v: number) =>
+                  updateRangeFilter("ageRange", "min", v)
+                }
+                onMaxChange={(v: number) =>
+                  updateRangeFilter("ageRange", "max", v)
+                }
                 isOpen={openDropdown === "age"}
                 onToggleOpen={() => toggleDropdown("age")}
               />
@@ -200,16 +209,19 @@ export default function SalesManagementPage() {
               <DateRangeFilter
                 startDate={filters.dateRange.start}
                 endDate={filters.dateRange.end}
-                onStartChange={(v: string) => updateRangeFilter("dateRange", "start", v)}
-                onEndChange={(v: string) => updateRangeFilter("dateRange", "end", v)}
+                onStartChange={(v: string) =>
+                  updateRangeFilter("dateRange", "start", v)
+                }
+                onEndChange={(v: string) =>
+                  updateRangeFilter("dateRange", "end", v)
+                }
                 isOpen={openDropdown === "date"}
                 onToggleOpen={() => toggleDropdown("date")}
               />
             </div>
-
           </div>
 
-          {/* SORT (RIGHT SIDE) */}
+          {/* SORT DROPDOWN */}
           <div className="ml-auto flex items-center gap-3 pr-3">
             <select
               value={sortBy}
@@ -225,7 +237,7 @@ export default function SalesManagementPage() {
           </div>
         </div>
 
-        {/* STATS CARDS */}
+        {/* STATS */}
         <div className="flex items-start gap-4 pl-6 pb-4 flex-wrap bg-white">
           <StatsCard title="Total units sold" value={totalUnits} />
           <StatsCard
