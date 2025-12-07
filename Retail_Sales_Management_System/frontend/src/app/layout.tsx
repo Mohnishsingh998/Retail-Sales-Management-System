@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "../styles/globals.css";
+import "./globals.css";
 
 // Load IBM Plex Sans
 import { IBM_Plex_Sans } from "next/font/google";
