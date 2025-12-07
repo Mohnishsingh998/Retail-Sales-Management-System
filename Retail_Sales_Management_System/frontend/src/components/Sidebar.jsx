@@ -16,9 +16,11 @@ import {
 
 const Sidebar = () => {
   const [expandedMenus, setExpandedMenus] = useState({
+    vault: true,
     services: true,
     invoices: true,
   });
+
   const [selectedItem, setSelectedItem] = useState("Dashboard");
 
   const toggleMenu = (menu) => {
@@ -29,176 +31,153 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="w-64 bg-gray-50 border-r border-gray-200 flex flex-col h-screen">
-      {/* User Profile Section */}
-      <div className="p-4 border-b border-gray-200 bg-white">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center shadow-md">
-              <span className="text-white font-bold text-xl">⚡</span>
+    <aside className="w-64 bg-gray-50 border-r border-gray-200 flex flex-col h-screen p-2">
+      {/* Vault Header */}
+      <div className="p-2 bg-white rounded-md border border-gray-200">
+        <button
+          onClick={() => toggleMenu("vault")}
+          className="w-full flex items-center justify-between px-2 py-2 hover:bg-gray-100 rounded-md transition"
+        >
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 rounded-xl bg-black justify-center ">
+              <img src="nameLogo.png" alt="Logo" className="w-2xl h-2xl object-cover" />
             </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 text-sm">Vault</h3>
+
+            <div className="text-left">
+              <h3 className="font-semibold text-gray-900 text-lg">Vault</h3>
               <p className="text-xs text-gray-500">Anurag Yadav</p>
             </div>
           </div>
-          <ChevronDown className="w-4 h-4 text-gray-400" />
-        </div>
+
+          <ChevronDown
+            className={`w-4 h-4 text-gray-500 transition-transform ${
+              expandedMenus.vault ? "" : "-rotate-90"
+            }`}
+          />
+        </button>
       </div>
 
-      {/* Navigation Menu */}
-      <nav className="flex-1 overflow-y-auto p-3">
-        {/* Dashboard */}
-        <button
-          onClick={() => setSelectedItem("Dashboard")}
-          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors mb-1 ${
-            selectedItem === "Dashboard"
-              ? "bg-gray-200 text-gray-900 font-medium"
-              : "text-gray-700 hover:bg-gray-100"
-          }`}
-        >
-          <LayoutDashboard className="w-5 h-5" />
-          <span>Dashboard</span>
-        </button>
-
-        {/* Nexus */}
-        <button
-          onClick={() => setSelectedItem("Nexus")}
-          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors mb-1 ${
-            selectedItem === "Nexus"
-              ? "bg-gray-200 text-gray-900 font-medium"
-              : "text-gray-700 hover:bg-gray-100"
-          }`}
-        >
-          <Package className="w-5 h-5" />
-          <span>Nexus</span>
-        </button>
-
-        {/* Intake */}
-        <button
-          onClick={() => setSelectedItem("Intake")}
-          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors mb-1 ${
-            selectedItem === "Intake"
-              ? "bg-gray-200 text-gray-900 font-medium"
-              : "text-gray-700 hover:bg-gray-100"
-          }`}
-        >
-          <FileInput className="w-5 h-5" />
-          <span>Intake</span>
-        </button>
-
-        {/* Services Section */}
-        <div className="mt-2">
+      {/* EVERYTHING UNDER VAULT DROPDOWN */}
+      {expandedMenus.vault && (
+        <nav className="flex-1 overflow-y-auto p-2">
+          {/* Dashboard */}
           <button
-            onClick={() => toggleMenu("services")}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+            onClick={() => setSelectedItem("Dashboard")}
+            className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm mb-1 transition ${
+              selectedItem === "Dashboard"
+                ? "bg-gray-200 text-gray-900 font-medium"
+                : "text-gray-700 hover:bg-gray-100"
+            }`}
           >
-            <Settings className="w-5 h-5" />
-            <span>Services</span>
-            <ChevronDown
-              className={`w-4 h-4 ml-auto transition-transform ${
-                expandedMenus.services ? "" : "-rotate-90"
-              }`}
-            />
+            <LayoutDashboard className="w-5 h-5" />
+            <span>Dashboard</span>
           </button>
 
-          {expandedMenus.services && (
-            <div className="ml-8 mt-1 space-y-1">
-              <button
-                onClick={() => setSelectedItem("Pre-active")}
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
-                  selectedItem === "Pre-active"
-                    ? "bg-gray-200 text-gray-900 font-medium"
-                    : "text-gray-600 hover:bg-gray-100"
-                }`}
-              >
-                <Circle className="w-4 h-4" />
-                <span>Pre-active</span>
-              </button>
-
-              <button
-                onClick={() => setSelectedItem("Active")}
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
-                  selectedItem === "Active"
-                    ? "bg-gray-200 text-gray-900 font-medium"
-                    : "text-gray-600 hover:bg-gray-100"
-                }`}
-              >
-                <CheckCircle className="w-4 h-4" />
-                <span>Active</span>
-              </button>
-
-              <button
-                onClick={() => setSelectedItem("Blocked")}
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
-                  selectedItem === "Blocked"
-                    ? "bg-gray-200 text-gray-900 font-medium"
-                    : "text-gray-600 hover:bg-gray-100"
-                }`}
-              >
-                <XCircle className="w-4 h-4" />
-                <span>Blocked</span>
-              </button>
-
-              <button
-                onClick={() => setSelectedItem("Closed")}
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
-                  selectedItem === "Closed"
-                    ? "bg-gray-200 text-gray-900 font-medium"
-                    : "text-gray-600 hover:bg-gray-100"
-                }`}
-              >
-                <Lock className="w-4 h-4" />
-                <span>Closed</span>
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* Invoices Section */}
-        <div className="mt-2">
+          {/* Nexus */}
           <button
-            onClick={() => toggleMenu("invoices")}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+            onClick={() => setSelectedItem("Nexus")}
+            className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm mb-1 transition ${
+              selectedItem === "Nexus"
+                ? "bg-gray-200 text-gray-900 font-medium"
+                : "text-gray-700 hover:bg-gray-100"
+            }`}
           >
-            <FileText className="w-5 h-5" />
-            <span>Invoices</span>
-            <ChevronDown
-              className={`w-4 h-4 ml-auto transition-transform ${
-                expandedMenus.invoices ? "" : "-rotate-90"
-              }`}
-            />
+            <Package className="w-5 h-5" />
+            <span>Nexus</span>
           </button>
 
-          {expandedMenus.invoices && (
-            <div className="ml-8 mt-1 space-y-1">
-              <button
-                onClick={() => setSelectedItem("Proforma Invoices")}
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
-                  selectedItem === "Proforma Invoices"
-                    ? "bg-gray-200 text-gray-900 font-medium"
-                    : "text-gray-600 hover:bg-gray-100"
-                }`}
-              >
-                <FileText className="w-4 h-4" />
-                <span className="font-semibold">Proforma Invoices</span>
-              </button>
+          {/* Intake */}
+          <button
+            onClick={() => setSelectedItem("Intake")}
+            className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm mb-1 transition ${
+              selectedItem === "Intake"
+                ? "bg-gray-200 text-gray-900 font-medium"
+                : "text-gray-700 hover:bg-gray-100"
+            }`}
+          >
+            <FileInput className="w-5 h-5" />
+            <span>Intake</span>
+          </button>
 
-              <button
-                onClick={() => setSelectedItem("Final Invoices")}
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
-                  selectedItem === "Final Invoices"
-                    ? "bg-gray-200 text-gray-900 font-medium"
-                    : "text-gray-600 hover:bg-gray-100"
+          {/* SERVICES */}
+          <div className="bg-white p-2 mt-2 rounded-md border border-gray-200">
+            <button
+              onClick={() => toggleMenu("services")}
+              className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-100 transition"
+            >
+              <Settings className="w-5 h-5" />
+              <span>Services</span>
+              <ChevronDown
+                className={`w-4 h-4 ml-auto transition-transform ${
+                  expandedMenus.services ? "" : "-rotate-90"
                 }`}
-              >
-                <FileText className="w-4 h-4" />
-                <span>Final Invoices</span>
-              </button>
-            </div>
-          )}
-        </div>
-      </nav>
+              />
+            </button>
+
+            {expandedMenus.services && (
+              <div className="ml-8 mt-1 space-y-1">
+                {[
+                  { name: "Pre-active", icon: <Circle className="w-4 h-4" /> },
+                  { name: "Active", icon: <CheckCircle className="w-4 h-4" /> },
+                  { name: "Blocked", icon: <XCircle className="w-4 h-4" /> },
+                  { name: "Closed", icon: <Lock className="w-4 h-4" /> },
+                ].map((item) => (
+                  <button
+                    key={item.name}
+                    onClick={() => setSelectedItem(item.name)}
+                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition ${
+                      selectedItem === item.name
+                        ? "bg-gray-200 text-gray-900 font-medium"
+                        : "text-gray-600 hover:bg-gray-100"
+                    }`}
+                  >
+                    {item.icon}
+                    <span>{item.name}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* INVOICES */}
+          <div className="bg-white p-2 mt-2 rounded-md border border-gray-200">
+            <button
+              onClick={() => toggleMenu("invoices")}
+              className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-100 transition"
+            >
+              <FileText className="w-5 h-5" />
+              <span>Invoices</span>
+              <ChevronDown
+                className={`w-4 h-4 ml-auto transition-transform ${
+                  expandedMenus.invoices ? "" : "-rotate-90"
+                }`}
+              />
+            </button>
+
+            {expandedMenus.invoices && (
+              <div className="ml-8 mt-1 space-y-1">
+                {["Proforma Invoices", "Final Invoices"].map((label) => (
+                  <button
+                    key={label}
+                    onClick={() => setSelectedItem(label)}
+                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition ${
+                      selectedItem === label
+                        ? "bg-gray-200 text-gray-900 font-medium"
+                        : "text-gray-600 hover:bg-gray-100"
+                    }`}
+                  >
+                    {/* Icon container fix */}
+                    <span className="w-4 h-4 flex items-center justify-center">
+                      <FileText className="w-4 h-4 text-gray-500" />
+                    </span>
+                    <span>{label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </nav>
+      )}
     </aside>
   );
 };
