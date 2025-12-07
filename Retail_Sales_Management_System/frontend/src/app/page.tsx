@@ -132,9 +132,9 @@ export default function SalesManagementPage() {
             <div className="dropdown-wrapper relative">
               <FilterDropdown
                 title="Customer Region"
-                options={FILTER_OPTIONS.customerRegion}
+                options={FILTER_OPTIONS.customerRegion as any}
                 category="customerRegion"
-                selectedValues={filters.customerRegion}
+                selectedValues={filters.customerRegion as any}
                 onToggle={toggleFilter}
                 isOpen={openDropdown === "customerRegion"}
                 onToggleOpen={() => toggleDropdown("customerRegion")}
@@ -144,9 +144,9 @@ export default function SalesManagementPage() {
             <div className="dropdown-wrapper relative">
               <FilterDropdown
                 title="Gender"
-                options={FILTER_OPTIONS.gender}
+                options={FILTER_OPTIONS.gender as any}
                 category="gender"
-                selectedValues={filters.gender}
+                selectedValues={filters.gender as any}
                 onToggle={toggleFilter}
                 isOpen={openDropdown === "gender"}
                 onToggleOpen={() => toggleDropdown("gender")}
@@ -172,9 +172,9 @@ export default function SalesManagementPage() {
             <div className="dropdown-wrapper relative">
               <FilterDropdown
                 title="Product Category"
-                options={FILTER_OPTIONS.productCategory}
+                options={FILTER_OPTIONS.productCategory as any}
                 category="productCategory"
-                selectedValues={filters.productCategory}
+                selectedValues={filters.productCategory as any}
                 onToggle={toggleFilter}
                 isOpen={openDropdown === "productCategory"}
                 onToggleOpen={() => toggleDropdown("productCategory")}
@@ -184,9 +184,9 @@ export default function SalesManagementPage() {
             <div className="dropdown-wrapper relative">
               <FilterDropdown
                 title="Tags"
-                options={FILTER_OPTIONS.tags}
+                options={FILTER_OPTIONS.tags as any}
                 category="tags"
-                selectedValues={filters.tags}
+                selectedValues={filters.tags as any}
                 onToggle={toggleFilter}
                 isOpen={openDropdown === "tags"}
                 onToggleOpen={() => toggleDropdown("tags")}
@@ -196,9 +196,9 @@ export default function SalesManagementPage() {
             <div className="dropdown-wrapper relative">
               <FilterDropdown
                 title="Payment Method"
-                options={FILTER_OPTIONS.paymentMethod}
+                options={FILTER_OPTIONS.paymentMethod as any}
                 category="paymentMethod"
-                selectedValues={filters.paymentMethod}
+                selectedValues={filters.paymentMethod as any}
                 onToggle={toggleFilter}
                 isOpen={openDropdown === "paymentMethod"}
                 onToggleOpen={() => toggleDropdown("paymentMethod")}
