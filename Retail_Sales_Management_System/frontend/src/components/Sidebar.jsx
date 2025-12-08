@@ -12,6 +12,11 @@ import {
   XCircle,
   Lock,
   Circle,
+  UsersRound,
+  ChartColumnBig,
+  CirclePlay,
+  CheckCheck,
+  CircleCheckBig,
 } from "lucide-react";
 
 const Sidebar = () => {
@@ -59,7 +64,7 @@ const Sidebar = () => {
 
       {/* EVERYTHING UNDER VAULT DROPDOWN */}
       {expandedMenus.vault && (
-        <nav className="flex-1 overflow-y-auto p-2">
+        <nav className="flex-1 overflow-y-auto py-2">
           {/* Dashboard */}
           <button
             onClick={() => setSelectedItem("Dashboard")}
@@ -69,7 +74,7 @@ const Sidebar = () => {
                 : "text-gray-700 hover:bg-gray-100"
             }`}
           >
-            <LayoutDashboard className="w-5 h-5" />
+            <ChartColumnBig className="w-5 h-5" />
             <span>Dashboard</span>
           </button>
 
@@ -82,7 +87,7 @@ const Sidebar = () => {
                 : "text-gray-700 hover:bg-gray-100"
             }`}
           >
-            <Package className="w-5 h-5" />
+            <UsersRound className="w-5 h-5"/>
             <span>Nexus</span>
           </button>
 
@@ -95,7 +100,8 @@ const Sidebar = () => {
                 : "text-gray-700 hover:bg-gray-100"
             }`}
           >
-            <FileInput className="w-5 h-5" />
+            <CirclePlay className="w-5 h-5" />
+            
             <span>Intake</span>
           </button>
 
@@ -117,10 +123,10 @@ const Sidebar = () => {
             {expandedMenus.services && (
               <div className="ml-8 mt-1 space-y-1">
                 {[
-                  { name: "Pre-active", icon: <Circle className="w-4 h-4" /> },
-                  { name: "Active", icon: <CheckCircle className="w-4 h-4" /> },
+                  { name: "Pre-active", icon: <CirclePlay className="w-4 h-4" /> },
+                  { name: "Active", icon: <CheckCheck className="w-4 h-4" /> },
                   { name: "Blocked", icon: <XCircle className="w-4 h-4" /> },
-                  { name: "Closed", icon: <Lock className="w-4 h-4" /> },
+                  { name: "Closed", icon: <CircleCheckBig className="w-4 h-4" /> },
                 ].map((item) => (
                   <button
                     key={item.name}
