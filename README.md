@@ -129,7 +129,7 @@ Retail_Sales_Management_System/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/retail-sales-management-system.git
+git clone https://github.com/Mohnishsingh998/Retail-Sales-Management-System.git
 cd Retail_Sales_Management_System
 ```
 
