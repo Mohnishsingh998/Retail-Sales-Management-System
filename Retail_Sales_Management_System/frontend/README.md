@@ -1,211 +1,211 @@
-# TruEstate Sales Management System - Frontend
+# 🎨 Frontend – Retail Sales Management System
 
-A modern, responsive sales management dashboard built with Next.js 15, React 19, and Tailwind CSS v4. Features advanced search, filtering, sorting, and pagination capabilities for managing retail sales data.
+## 1. 📌 Overview (Frontend)
 
-## 🚀 Features
+A high-performance frontend dashboard built with Next.js 15, React 19, and Tailwind CSS v4 for visualizing retail sales data.  
+It provides real-time search, filtering, sorting, and pagination, rendering large datasets efficiently.  
+The interface is fully responsive, optimized for speed, and integrates seamlessly with the backend REST API.
 
-- **Advanced Search**: Real-time search across customer names and phone numbers
-- **Multi-Filter Support**: Filter by region, gender, age, category, payment method, and date ranges
-- **Dynamic Sorting**: Sort by date, quantity, customer name, and amount
-- **Pagination**: Efficient data pagination with 10 items per page
-- **Responsive Design**: Mobile-first design that works on all devices
-- **Real-time Updates**: Live data fetching from MongoDB backend
-- **Performance Optimized**: Built with Next.js App Router and React Server Components
+---
 
-## 🛠️ Tech Stack
+## 2. 🛠 Tech Stack (Frontend)
 
 - **Framework**: Next.js 15 (App Router)
 - **Language**: TypeScript
+- **UI Library**: React 19
 - **Styling**: Tailwind CSS v4
-- **UI Components**: Lucide React Icons
+- **Icons**: Lucide React
 - **State Management**: React Hooks
 - **HTTP Client**: Fetch API
 - **Package Manager**: pnpm
+- **Deployment**: Vercel
 
+---
 
+## 3. 🔍 Search Implementation Summary
 
-## Project Structure
-```
-frontend/
-├── src/
-│   ├── app/                          # Next.js App Router
-│   │   ├── favicon.ico              # App favicon
-│   │   ├── globals.css              # Global styles with Tailwind CSS v4
-│   │   ├── layout.tsx               # Root layout component
-│   │   └── page.tsx                 # Home page (main dashboard)
-│   │
-│   ├── components/                   # React Components
-│   │   ├── DateRangeFilter.jsx      # Date range picker component
-│   │   ├── FilterDropdown.jsx       # Multi-select dropdown filter
-│   │   ├── Pagination.jsx           # Pagination navigation component
-│   │   ├── RangeFilter.jsx          # Numeric range filter (age)
-│   │   ├── SearchBar.jsx            # Search input component
-│   │   ├── Sidebar.jsx              # Sidebar navigation/filters
-│   │   ├── StatsCard.jsx            # Summary statistics card
-│   │   └── TransactionTable.jsx     # Main data table component
-│   │
-│   ├── hooks/                        # Custom React Hooks
-│   │   ├── useFilters.js            # Filter state management hook
-│   │   └── useSales.js              # Sales data fetching hook
-│   │
-│   ├── services/                     # API Services
-│   │   └── api.js                   # API client and endpoints
-│   │
-│   └── utils/                        # Utility Functions
-│       ├── constants.js             # App-wide constants
-│       └── helpers.js               # Helper functions
-│
-├── public/                           # Static Assets
-│   └── nameLogo.png                 # Company logo
-│
-├── node_modules/                     # Dependencies (git-ignored)
-│
-├── .next/                            # Next.js build output (git-ignored)
-│
-├── eslint.config.mjs                 # ESLint configuration
-├── next.config.ts                    # Next.js configuration
-├── package.json                      # Project dependencies and scripts
-├── postcss.config.mjs                # PostCSS configuration (Tailwind)
-├── tailwind.config.ts                # Tailwind CSS configuration
-├── tsconfig.json                     # TypeScript configuration
-├── .gitignore                        # Git ignore rules
-└── README.md                         # Project documentation
+The frontend implements real-time search with debouncing, allowing users to search customer names and phone numbers.  
+
+**Key Features:**
+- Search field updates the query parameters and triggers a new fetch without reloading the page
+- Case-insensitive matching
+- Integrates seamlessly with other filters, sorting, and pagination
+- Debounce delay of 500ms to optimize API calls
+
+**Example Implementation:**
+```jsx
+const [searchTerm, setSearchTerm] = useState("");
+
+// Debounced search
+useEffect(() => {
+  const timer = setTimeout(() => {
+    fetchSales({ search: searchTerm, ...filters });
+  }, 500);
+  
+  return () => clearTimeout(timer);
+}, [searchTerm]);
 ```
 
-## 🚀 Getting Started
+---
 
-### 1. Clone the repository
+## 4. 🎛 Filter Implementation Summary
+
+The dashboard includes multi-dimensional filters:
+- **Multi-select filters**: Region, Gender, Product Category, Payment Method
+- **Range filters**: Age Range, Date Range
+
+Filters are managed through a centralized `useFilters` hook, ensuring clean state handling.  
+All filters work in combination and persist during navigation, providing an intuitive user experience.
+
+**Filter Management:**
+```jsx
+const useFilters = () => {
+  const [filters, setFilters] = useState({
+    region: [],
+    gender: [],
+    category: [],
+    payment: [],
+    ageMin: null,
+    ageMax: null,
+    dateFrom: null,
+    dateTo: null
+  });
+
+  const updateFilter = (key, value) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
+  };
+
+  return { filters, updateFilter };
+};
+```
+
+---
+
+## 5. ↕ Sorting Implementation Summary
+
+Users can sort sales records by:
+- Date (newest first)
+- Quantity (highest first)
+- Customer Name (A-Z)
+- Total Amount (highest first)
+
+The frontend passes sorting parameters to the backend through URL query strings while preserving active filters and search terms.  
+Sorting is applied instantly and updates the table without a full page reload.
+
+**Example Implementation:**
+```jsx
+const [sortBy, setSortBy] = useState("date");
+const [sortOrder, setSortOrder] = useState("desc");
+
+const handleSort = (field) => {
+  const newOrder = sortBy === field && sortOrder === "desc" ? "asc" : "desc";
+  setSortBy(field);
+  setSortOrder(newOrder);
+  fetchSales({ sortBy: field, sortOrder: newOrder, ...filters });
+};
+```
+
+---
+
+## 6. 📄 Pagination Implementation Summary
+
+Pagination is implemented using a custom component that supports:
+- **10 items per page** (default)
+- **Next/Previous navigation**
+- **Direct page number selection**
+- **Total count display**
+
+The frontend updates the `page` query parameter, and the backend returns paginated data along with total count, ensuring fast browsing through large datasets.
+
+**Pagination Component:**
+```jsx
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  return (
+    <div className="flex items-center gap-2">
+      <button 
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+      >
+        Previous
+      </button>
+      
+      <span>Page {currentPage} of {totalPages}</span>
+      
+      <button 
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+      >
+        Next
+      </button>
+    </div>
+  );
+};
+```
+
+---
+
+## 7. ⚙ Frontend Setup Instructions
+
+### 1. Clone the Repository
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Mohnishsingh998/Retail-Sales-Management-System.git
 cd frontend
 ```
 
-### 2. Install dependencies
+### 2. Install Dependencies
 ```bash
 pnpm install
 ```
 
 ### 3. Environment Variables
 
-Create a `.env.local` file in the frontend root:
+Create `.env.local`:
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:5002/api
+NEXT_PUBLIC_API_URL=http://localhost:5002/api/sales
 ```
 
-For production (Vercel):
+Production (Vercel):
 ```env
-NEXT_PUBLIC_API_URL=https://your-backend.onrender.com/api
+NEXT_PUBLIC_API_URL=https://retail-sales-management-system-vema.onrender.com/api
 ```
 
-### 4. Run development server
+### 4. Run Development Server
 ```bash
 pnpm dev
 ```
 
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### 5. Build for production
+### 5. Build for Production
 ```bash
 pnpm build
 ```
 
-### 6. Start production server
+### 6. Start Production Server
 ```bash
 pnpm start
 ```
 
-## 📦 Available Scripts
+### 7. Available Scripts
 ```bash
 pnpm dev          # Start development server
 pnpm build        # Build for production
 pnpm start        # Start production server
 pnpm lint         # Run ESLint
-pnpm type-check   # Run TypeScript type checking
 ```
 
-## 🎨 Styling with Tailwind CSS v4
-
-This project uses Tailwind CSS v4 with the new PostCSS plugin:
-
-**Configuration**: `tailwind.config.ts`
-```typescript
-import type { Config } from "tailwindcss";
-
-export default {
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
-} satisfies Config;
-```
-
-**Global CSS**: `src/app/globals.css`
-```css
-@import "tailwindcss";
-```
-
-## 🔌 API Integration
-
-The frontend connects to the backend API for all data operations:
-
-**Base URL**: Configured via `NEXT_PUBLIC_API_URL` environment variable
-
-**Main Endpoint**: `GET /api/sales`
-
-**Query Parameters**:
-- `search` - Search term
-- `region` - Customer region filter
-- `gender` - Gender filter
-- `category` - Product category filter
-- `payment` - Payment method filter
-- `ageMin`, `ageMax` - Age range
-- `dateFrom`, `dateTo` - Date range
-- `sortBy` - Sort field (date/quantity/name)
-- `page` - Page number
-
+---
 
 ## 🚀 Deployment on Vercel
 
-🔗 **Live Demo:** https://retail-sales-management-system-6h1o.vercel.app/
+🔗 **Live Demo**: [https://retail-sales-management-system-6h1o.vercel.app/](https://retail-sales-management-system-6h1o.vercel.app/)
 
-## 📝 Key Features Implementation
+### Deploy Steps:
+1. Push your code to GitHub
+2. Import repository in Vercel
+3. Add environment variable: `NEXT_PUBLIC_API_URL`
+4. Deploy automatically
 
-
-### Search Implementation
-- Real-time search with debouncing
-- Searches customer name and phone number
-- Case-insensitive matching
-
-### Filter Implementation
-- Multi-select filters for categories
-- Range filters for age and date
-- Filters work in combination
-- State preserved across pagination
-
-### Sorting Implementation
-- Sort by date (newest first)
-- Sort by quantity (highest first)
-- Sort by customer name (A-Z)
-- Maintains active filters
-
-### Pagination Implementation
-- 10 items per page
-- Next/Previous navigation
-- Direct page number access
-- Total count display
-
-## 🔐 Environment Variables
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `NEXT_PUBLIC_API_URL` | Backend API base URL | `https://retail-sales-management-system-vema.onrender.com/api` |
-
-**Note**: Variables prefixed with `NEXT_PUBLIC_` are exposed to the browser.
-
-
-## 🙏 Acknowledgments
-
-- TruEstate for the assignment and opportunity
 ---
 
-**Built  for TruEstate SDE Intern Assignment**
+**Built for TruEstate SDE Intern Assignment**
