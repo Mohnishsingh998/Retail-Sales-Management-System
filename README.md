@@ -152,7 +152,7 @@ MONGO_URI=mongodb://localhost:27017/sales-management
 #### Frontend Environment (.env.local)
 Create `frontend/.env.local`:
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:5002/api
+NEXT_PUBLIC_API_URL=http://localhost:5002/api/sales
 ```
 
 ### 4. Start Development Servers
@@ -170,7 +170,6 @@ pnpm dev:backend   # Backend only (http://localhost:5002)
 
 - **Frontend**: [http://localhost:3000](http://localhost:3000)
 - **Backend API**: [http://localhost:5002/api](http://localhost:5002/api)
-- **API Health**: [http://localhost:5002/api/sales](http://localhost:5002/api/sales)
 
 ---
 
